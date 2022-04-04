@@ -1,6 +1,6 @@
 {
     "name": "cirelramos/external-request",
-    "description": "The External Request package to send request to others api-rest .",
+    "description": "The External Request is a package to send request to others api-rest .",
     "type": "library",
     "license": "MIT",
     "keywords": [

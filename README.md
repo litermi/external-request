@@ -4,7 +4,7 @@
 
 ## About
 
-The `External Request` package to send request to others api-rest .
+The `External Request` is a package to send request to others api-rest .
 
 
 ## Installation
