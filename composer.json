@@ -1,0 +1,36 @@
+{
+    "name": "cirelramos/external-request",
+    "description": "package to log routines and sql query",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "log",
+        "database"
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/database": "^7.20|^8.19|^9.0",
+        "illuminate/http": "^7.20|^8.19|^9.0",
+        "illuminate/contracts": "^7.20|^8.19|^9.0",
+        "illuminate/config": "^7.20|^8.19|^9.0",
+        "guzzlehttp/guzzle": "^6.3.1|^7.0.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cirelramos\\ExternalRequest\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "authors": [
+        {
+            "name": "Cirel Ramos",
+            "email": "cirelramos@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
