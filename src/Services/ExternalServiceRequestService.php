@@ -3,12 +3,24 @@
 namespace Cirelramos\ExternalRequest\Services;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Request;
 
 /**
  *
  */
 class ExternalServiceRequestService
 {
+    /**
+     * @param $baseUri
+     * @param $method
+     * @param $requestUrl
+     * @param $formParams
+     * @param $headers
+     * @param $modeParams
+     * @return mixed
+     * @throws GuzzleException
+     */
     public static function execute(
         $baseUri,
         $method,
@@ -26,8 +38,23 @@ class ExternalServiceRequestService
             ]
         );
         
-        $headers[ 'cache-control' ] = 'no-cache';
-        $headers[ 'Content-Type' ]  = 'application/json';
+        /** @var Request $request */
+        $request = request();
+        foreach (config('external-request.default_parameters_to_header') as $key => $item) {
+            if ($request->$item) {
+                $headers[ $key ] = $item;
+            }
+        }
+        foreach (config('external-request.get_special_values_from_header') as $key => $item) {
+            if ($request->$item) {
+                $headers[ $key ] = $request->header($item);
+            }
+        }
+        foreach (config('external-request.get_special_values_from_request') as $key => $item) {
+            if ($request->$item) {
+                $formParams[ $key ] = $request->$item;
+            }
+        }
         
         $formAndHeader = [
             $modeParams => $formParams,

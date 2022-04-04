@@ -27,7 +27,7 @@ set provider
 ```
 
 
-The defaults are set in `config/logs.php`. Publish the config to copy the file to your own config:
+The defaults are set in `config/external-request.php`. Publish the config to copy the file to your own config:
 ```sh
 php artisan vendor:publish --provider="Cirelramos\ExternalRequest\Providers\ServiceProvider"
 ```

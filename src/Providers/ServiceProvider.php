@@ -20,13 +20,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     
     private function mergeConfig()
     {
-        $this->mergeConfigFrom($this->getConfigPath(), 'logs');
+        $this->mergeConfigFrom($this->getConfigPath(), 'external-request');
     }
     
     private function publishConfig()
     {
         // Publish a config file
-        $this->publishes([ $this->getConfigPath() => config_path('logs.php'), ], 'config');
+        $this->publishes([ $this->getConfigPath() => config_path('external-request.php'), ], 'config');
     }
 
     private function publishMigrations()
@@ -40,7 +40,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     private function getConfigPath()
     {
-        return __DIR__ . '/../../config/logs.php';
+        return __DIR__ . '/../../config/external-request.php';
     }
 
     /**
