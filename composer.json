@@ -1,6 +1,6 @@
 {
     "name": "cirelramos/external-request",
-    "description": "package to log routines and sql query",
+    "description": "The External Request package to send request to others api-rest .",
     "type": "library",
     "license": "MIT",
     "keywords": [
