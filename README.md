@@ -39,15 +39,33 @@ php artisan vendor:publish --provider="Cirelramos\ExternalRequest\Providers\Serv
 ## Usage
 
 ```php
+
 use Cirelramos\ExternalRequest\ExternalServiceRequestService;
 
-        $response = ExternalServiceRequestService::execute(
-            $baseUri,
-            'GET',
-            $requestUrl,
-            [],
-            $header
-        );
+$baseUri = "yourdomain.com"
+$requestPath = "/api/users"
+$formParams = [];
+$headers = [];
+
+$method = "GET";
+$response = ExternalServiceRequestService::execute(
+    $baseUri,
+    $method,
+    $requestPath,
+    $formParams,
+    $header
+);
+
+
+$method = "POST";
+$formParams = ["username":"cirel", "password":"you"];
+$responsePost =  ExternalServiceRequestService::execute(
+    $baseUri,
+    $method,
+    $requestPath,
+    $formParams,
+    $headers
+);
 ```
 
 

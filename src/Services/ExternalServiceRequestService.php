@@ -14,7 +14,7 @@ class ExternalServiceRequestService
     /**
      * @param $baseUri
      * @param $method
-     * @param $requestUrl
+     * @param $requestPath
      * @param $formParams
      * @param $headers
      * @param $modeParams
@@ -24,7 +24,7 @@ class ExternalServiceRequestService
     public static function execute(
         $baseUri,
         $method,
-        $requestUrl = '',
+        $requestPath = '',
         $formParams = [],
         $headers = [],
         $modeParams = 'form_params',
@@ -61,7 +61,7 @@ class ExternalServiceRequestService
             'headers'   => $headers,
         ];
         
-        $response = $client->request($method, $requestUrl, $formAndHeader);
+        $response = $client->request($method, $requestPath, $formAndHeader);
         
         $content = $response->getBody()
             ->getContents();
