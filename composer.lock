@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f724e561474f7c0a003f24a5fb6c1df1",
+    "content-hash": "d0ba2c17a94838269d2307f81102af88",
     "packages": [
+        {
+            "name": "cirelramos/logs",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cirelramos/log.git",
+                "reference": "240df7eb587708afbac8b368ed6dd95651afe1fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cirelramos/log/zipball/240df7eb587708afbac8b368ed6dd95651afe1fd",
+                "reference": "240df7eb587708afbac8b368ed6dd95651afe1fd",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "^7.20|^8.19|^9.0",
+                "illuminate/contracts": "^7.20|^8.19|^9.0",
+                "illuminate/database": "^7.20|^8.19|^9.0",
+                "illuminate/http": "^7.20|^8.19|^9.0",
+                "php": "^7.4|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cirelramos\\Logs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cirel Ramos",
+                    "email": "cirelramos@gmail.com"
+                }
+            ],
+            "description": "package to log routines and sql query",
+            "keywords": [
+                "database",
+                "laravel",
+                "log"
+            ],
+            "support": {
+                "issues": "https://github.com/cirelramos/log/issues",
+                "source": "https://github.com/cirelramos/log/tree/1.0.5"
+            },
+            "time": "2022-04-01T21:01:03+00:00"
+        },
         {
             "name": "doctrine/inflector",
             "version": "2.1.x-dev",
