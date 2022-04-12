@@ -6,6 +6,7 @@
 
 The `External Request` is a package to send request to others api-rest .
 
+##### [Tutorial how create composer package](https://cirelramos.blogspot.com/2022/04/how-create-composer-package.html)
 
 ## Installation
 
