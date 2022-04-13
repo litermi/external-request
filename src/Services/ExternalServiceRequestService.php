@@ -1,6 +1,6 @@
 <?php
 
-namespace Cirelramos\ExternalRequest\Services;
+namespace Litermi\ExternalRequest\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -37,7 +37,7 @@ class ExternalServiceRequestService
                 ],
             ]
         );
-        
+
         /** @var Request $request */
         $request = request();
         foreach (config('external-request.default_parameters_to_header') as $key => $item) {
@@ -55,18 +55,18 @@ class ExternalServiceRequestService
                 $formParams[ $key ] = $request->$item;
             }
         }
-        
+
         $formAndHeader = [
             $modeParams => $formParams,
             'headers'   => $headers,
         ];
-        
+
         $response = $client->request($method, $requestPath, $formAndHeader);
-        
+
         $content = $response->getBody()
             ->getContents();
-        
+
         return json_decode($content, true);
-        
+
     }
 }

@@ -10,9 +10,9 @@ The `External Request` is a package to send request to others api-rest .
 
 ## Installation
 
-Require the `cirelramos/external-request` package in your `composer.json` and update your dependencies:
+Require the `litermi/external-request` package in your `composer.json` and update your dependencies:
 ```sh
-composer require cirelramos/external-request
+composer require litermi/external-request
 ```
 
 
@@ -23,14 +23,14 @@ set provider
 ```php
 'providers' => [
     // ...
-    Cirelramos\ExternalRequest\Providers\ServiceProvider::class,
+    Litermi\ExternalRequest\Providers\ServiceProvider::class,
 ],
 ```
 
 
 The defaults are set in `config/external-request.php`. Publish the config to copy the file to your own config:
 ```sh
-php artisan vendor:publish --provider="Cirelramos\ExternalRequest\Providers\ServiceProvider"
+php artisan vendor:publish --provider="Litermi\ExternalRequest\Providers\ServiceProvider"
 ```
 
 > **Note:** this is necessary to you can change default config
@@ -41,7 +41,7 @@ php artisan vendor:publish --provider="Cirelramos\ExternalRequest\Providers\Serv
 
 ```php
 
-use Cirelramos\ExternalRequest\ExternalServiceRequestService;
+use Litermi\ExternalRequest\ExternalServiceRequestService;
 
 $baseUri = "yourdomain.com"
 $requestPath = "/api/users"
