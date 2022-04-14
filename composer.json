@@ -28,7 +28,7 @@
         },
         "laravel": {
             "providers": [
-                "ExternalRequest\\Providers\\ServiceProvider"
+                "Litermi\\ExternalRequest\\Providers\\ServiceProvider"
             ]
         }
     },
