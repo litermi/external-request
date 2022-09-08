@@ -35,7 +35,7 @@ class CatchExternalRequestService
             $data[ 'response_body' ] = $responseBody;
             $sendLogConsoleService = new SendLogConsoleService();
             $sendLogConsoleService->execute('critical-errors:' . $message, $data);
-            if (config('app.debug') === false) {
+            if (env('APP_DEBUG') === false) {
                 $data = [];
                 $data[ 'code' ] = $code;
                 $data[ 'message' ]       = __('error external service');
@@ -53,7 +53,7 @@ class CatchExternalRequestService
 
             $sendLogConsoleService = new SendLogConsoleService();
             $sendLogConsoleService->execute('critical-errors:' . $exception->getMessage(), $data);
-            if (config('app.debug') === false) {
+            if (env('APP_DEBUG') === false) {
                 $data = [];
                 $data[ 'code' ] = $code;
                 $data[ 'message' ]       = __('error external service');
