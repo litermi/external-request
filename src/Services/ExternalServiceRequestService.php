@@ -4,6 +4,7 @@ namespace Litermi\ExternalRequest\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
 
 /**
@@ -28,6 +29,7 @@ class ExternalServiceRequestService
         $formParams = [],
         $headers = [],
         $modeParams = 'form_params',
+        $async = false
     ) {
         $client = new Client(
             [
@@ -60,6 +62,12 @@ class ExternalServiceRequestService
             $modeParams => $formParams,
             'headers'   => $headers,
         ];
+
+
+        if($async === true){
+            $formAndHeader[RequestOptions::SYNCHRONOUS] = false;
+            return $client->requestAsync($method, $requestPath, $formAndHeader);
+        }
 
         $response = $client->request($method, $requestPath, $formAndHeader);
 
