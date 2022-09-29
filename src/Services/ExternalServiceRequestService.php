@@ -2,6 +2,7 @@
 
 namespace Litermi\ExternalRequest\Services;
 
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
@@ -65,8 +66,14 @@ class ExternalServiceRequestService
 
 
         if($async === true){
-            $formAndHeader[RequestOptions::SYNCHRONOUS] = false;
-            return $client->requestAsync($method, $requestPath, $formAndHeader);
+            $formAndHeader[ 'timeout' ] = 0.001;
+            $formAndHeader[ 'connect_timeout' ] = 0.001;
+
+            try {
+                return $client->request($method, $requestPath, $formAndHeader);
+            }catch (Exception $exception){
+                return true;
+            }
         }
 
         $response = $client->request($method, $requestPath, $formAndHeader);
