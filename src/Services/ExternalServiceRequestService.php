@@ -66,8 +66,8 @@ class ExternalServiceRequestService
 
 
         if($async === true){
-            $formAndHeader[ 'timeout' ] = 0.001;
-            $formAndHeader[ 'connect_timeout' ] = 0.001;
+            $formAndHeader[ 'timeout' ] = 0.4;
+            $formAndHeader[ 'connect_timeout' ] = 0.4;
 
             try {
                 return $client->request($method, $requestPath, $formAndHeader);
