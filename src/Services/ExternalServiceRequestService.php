@@ -20,7 +20,7 @@ class ExternalServiceRequestService
      * @param array $headers
      * @param string $modeParams
      * @param bool $async
-     * @param bool $purResponse
+     * @param bool $pureResponse
      * @return mixed
      * @throws GuzzleException
      */
@@ -32,7 +32,7 @@ class ExternalServiceRequestService
         $headers = [],
         $modeParams = 'form_params',
         $async = false,
-        $purResponse = false
+        $pureResponse = false
     ) {
         $client = new Client(
             [
@@ -80,7 +80,7 @@ class ExternalServiceRequestService
 
         $response = $client->request($method, $requestPath, $formAndHeader);
 
-        if($purResponse === true){
+        if($pureResponse === true){
             return $response;
         }
 
