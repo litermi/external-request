@@ -5,7 +5,6 @@ namespace Litermi\ExternalRequest\Services;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
 
 /**
@@ -16,10 +15,12 @@ class ExternalServiceRequestService
     /**
      * @param $baseUri
      * @param $method
-     * @param $requestPath
-     * @param $formParams
-     * @param $headers
-     * @param $modeParams
+     * @param string $requestPath
+     * @param array $formParams
+     * @param array $headers
+     * @param string $modeParams
+     * @param bool $async
+     * @param bool $purResponse
      * @return mixed
      * @throws GuzzleException
      */
@@ -30,7 +31,8 @@ class ExternalServiceRequestService
         $formParams = [],
         $headers = [],
         $modeParams = 'form_params',
-        $async = false
+        $async = false,
+        $purResponse = false
     ) {
         $client = new Client(
             [
@@ -77,6 +79,10 @@ class ExternalServiceRequestService
         }
 
         $response = $client->request($method, $requestPath, $formAndHeader);
+
+        if($purResponse === true){
+            return $response;
+        }
 
         $content = $response->getBody()
             ->getContents();
