@@ -36,4 +36,6 @@ return [
     'get_special_values_from_request' => [
         'ip' => 'ip',
     ],
+
+    'proxy_ip' => 'http://your-domain:3128',
 ];

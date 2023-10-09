@@ -32,7 +32,8 @@ class ExternalServiceRequestService
         $headers = [],
         $modeParams = 'form_params',
         $async = false,
-        $pureResponse = false
+        $pureResponse = false,
+        $proxy=false
     ) {
         $client = new Client(
             [
@@ -66,6 +67,9 @@ class ExternalServiceRequestService
             'headers'   => $headers,
         ];
 
+        if ($proxy === true && empty(config('external-request.proxy_ip')) === false) {
+            $formAndHeader['proxy'] = config('external-request.proxy_ip');
+        }
 
         if($async === true){
             $formAndHeader[ 'timeout' ] = 0.4;
