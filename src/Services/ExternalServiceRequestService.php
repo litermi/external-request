@@ -91,7 +91,13 @@ class ExternalServiceRequestService
         $content = $response->getBody()
             ->getContents();
 
-        return json_decode($content, true);
+        $jsonReturn = json_decode($content, true);
+
+        if (empty($jsonReturn) && is_string($content) && empty($content) === false) {
+            $jsonReturn = $content;
+        }
+
+        return $jsonReturn;
 
     }
 }
