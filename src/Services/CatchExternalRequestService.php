@@ -24,7 +24,7 @@ class CatchExternalRequestService
             $code           = $exception->getCode();
             $data[ 'code' ] = $code;
             $host           = $exception->getRequest()->getUri()->getHost();
-            $error          = json_decode($responseBody->getContents());
+            $error          = empty($responseBody) ? null : json_decode($responseBody->getContents());
             $error          = $error === null || is_bool($error) ? (object) [] : $error;
             if (( $host !== null ) && ( is_string($host) === true )) {
                 $error->host = $host;
