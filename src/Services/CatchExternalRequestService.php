@@ -21,7 +21,7 @@ class CatchExternalRequestService
             $message        = __('error external service');
             $responseBody   = $exception->getResponse();
             $responseBody   = empty($responseBody) ? $responseBody : $responseBody->getBody();
-            $code           = $exception->getCode();
+            $code           = empty($exception->getCode()) ? 500 : $exception->getCode();
             $data[ 'code' ] = $code;
             $host           = $exception->getRequest()->getUri()->getHost();
             $error          = empty($responseBody) ? null : json_decode($responseBody->getContents());
@@ -29,19 +29,17 @@ class CatchExternalRequestService
             if (( $host !== null ) && ( is_string($host) === true )) {
                 $error->host = $host;
             }
-            $error= empty($responseBody)? $exception->getMessage() : $error;
             $message                  = property_exists($error, 'message') ? $error->message : '';
             $data[ 'message' ]        = $message;
             $data[ 'error_external' ] = $error;
-
             $data[ 'response_body' ] = $responseBody;
+            $data['exception_message'] = $exception->getMessage();
             $sendLogConsoleService = new SendLogConsoleService();
             $sendLogConsoleService->execute('critical-errors:' . $message, $data);
             if (env('APP_DEBUG') === false) {
                 $data = [];
                 $data[ 'code' ] = $code;
                 $data[ 'message' ]       = __('error external service');
-                $data['exception_message'] = $exception->getMessage();
             }
 
             return $data;
