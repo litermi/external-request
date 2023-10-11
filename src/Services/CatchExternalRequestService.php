@@ -19,7 +19,8 @@ class CatchExternalRequestService
     {
         try {
             $message        = __('error external service');
-            $responseBody   = $exception->getResponse()->getBody();
+            $responseBody   = $exception->getResponse();
+            $responseBody   = empty($responseBody) ? $responseBody : $responseBody->getBody();
             $code           = $exception->getCode();
             $data[ 'code' ] = $code;
             $host           = $exception->getRequest()->getUri()->getHost();
