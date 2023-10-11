@@ -29,6 +29,7 @@ class CatchExternalRequestService
             if (( $host !== null ) && ( is_string($host) === true )) {
                 $error->host = $host;
             }
+            $error= empty($responseBody)? $exception->getMessage() : $error;
             $message                  = property_exists($error, 'message') ? $error->message : '';
             $data[ 'message' ]        = $message;
             $data[ 'error_external' ] = $error;
@@ -40,6 +41,7 @@ class CatchExternalRequestService
                 $data = [];
                 $data[ 'code' ] = $code;
                 $data[ 'message' ]       = __('error external service');
+                $data['exception_message'] = $exception->getMessage();
             }
 
             return $data;
