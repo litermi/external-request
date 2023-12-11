@@ -5,7 +5,10 @@ namespace Litermi\ExternalRequest\Services;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use HttpException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Litermi\SimpleNotification\Facades\SimpleNotificationFacade;
 
 /**
  *
@@ -88,10 +91,26 @@ class ExternalServiceRequestService
             return $response;
         }
 
-        $content = $response->getBody()
-            ->getContents();
+        $content = "";
+        try {
+            $content = $response->getBody()->getContents();
+            $jsonReturn = json_decode($content);
+        }catch (Exception $exception){
+            SimpleNotificationFacade::email()
+                ->slack()
+                ->email()
+                ->error()
+                ->notification(
+                                 translateInterTerm('ERROR_REQUEST_JSON_DECODE'),
+                    extraValues: ['content' => $content]
+                );
 
-        $jsonReturn = json_decode($content, true);
+            throw new HttpException(
+                translateInterTerm('ERROR_REQUEST_JSON_DECODE'),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+                null,
+            );
+        }
 
         if (empty($jsonReturn) && is_string($content) && empty($content) === false) {
             $jsonReturn = $content;
@@ -99,5 +118,26 @@ class ExternalServiceRequestService
 
         return $jsonReturn;
 
+    }
+
+    private static function getInfo($file_paths)
+    {
+        $stringToReturn = "";
+        foreach ($file_paths as $file_path) {
+            foreach ($file_path as $key => $var) {
+                if ($key == 'args') {
+                    foreach ($var as $key_arg => $var_arg) {
+                        if (is_object($var_arg) === false && is_string($key_arg) && is_string($var_arg)) {
+                            $stringToReturn .= $key_arg . ': ' . $var_arg . '<br>';
+                        }
+                    }
+                } else {
+                    if (is_object($var) === false && is_string($key) && is_string($var)) {
+                        $stringToReturn .= $key . ': ' . $var . '<br>';
+                    }
+                }
+            }
+        }
+        return $stringToReturn;
     }
 }
