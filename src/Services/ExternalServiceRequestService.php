@@ -94,7 +94,7 @@ class ExternalServiceRequestService
         $content = "";
         try {
             $content = $response->getBody()->getContents();
-            $jsonReturn = json_decode($content);
+            $jsonReturn = json_decode($content, true);
         }catch (Exception $exception){
             SimpleNotificationFacade::email()
                 ->slack()
