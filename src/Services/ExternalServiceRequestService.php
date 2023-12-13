@@ -102,7 +102,7 @@ class ExternalServiceRequestService
                 $array = [
                     $content,
                 ];
-                LogConsoleFacade::full()->log('response-request', $array);
+                LogConsoleFacade::full()->log('external-response-request', $array);
             }
             $jsonReturn = json_decode($content, true);
         } catch (Exception $exception) {
