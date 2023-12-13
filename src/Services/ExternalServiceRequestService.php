@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use HttpException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Litermi\Logs\Facades\LogConsoleFacade;
 use Litermi\SimpleNotification\Facades\SimpleNotificationFacade;
 
 /**
@@ -24,8 +25,10 @@ class ExternalServiceRequestService
      * @param string $modeParams
      * @param bool $async
      * @param bool $pureResponse
+     * @param bool $proxy
      * @return mixed
      * @throws GuzzleException
+     * @throws HttpException
      */
     public static function execute(
         $baseUri,
@@ -36,7 +39,8 @@ class ExternalServiceRequestService
         $modeParams = 'form_params',
         $async = false,
         $pureResponse = false,
-        $proxy=false
+        $proxy = false,
+        $logActive = false
     ) {
         $client = new Client(
             [
@@ -51,17 +55,17 @@ class ExternalServiceRequestService
         $request = request();
         foreach (config('external-request.default_parameters_to_header') as $key => $item) {
             if ($request->$item) {
-                $headers[ $key ] = $item;
+                $headers[$key] = $item;
             }
         }
         foreach (config('external-request.get_special_values_from_header') as $key => $item) {
             if ($request->$item) {
-                $headers[ $key ] = $request->header($item);
+                $headers[$key] = $request->header($item);
             }
         }
         foreach (config('external-request.get_special_values_from_request') as $key => $item) {
             if ($request->$item) {
-                $formParams[ $key ] = $request->$item;
+                $formParams[$key] = $request->$item;
             }
         }
 
@@ -74,28 +78,34 @@ class ExternalServiceRequestService
             $formAndHeader['proxy'] = config('external-request.proxy_ip');
         }
 
-        if($async === true){
-            $formAndHeader[ 'timeout' ] = 0.4;
-            $formAndHeader[ 'connect_timeout' ] = 0.4;
+        if ($async === true) {
+            $formAndHeader['timeout']         = 0.4;
+            $formAndHeader['connect_timeout'] = 0.4;
 
             try {
                 return $client->request($method, $requestPath, $formAndHeader);
-            }catch (Exception $exception){
+            } catch (Exception $exception) {
                 return true;
             }
         }
 
         $response = $client->request($method, $requestPath, $formAndHeader);
 
-        if($pureResponse === true){
+        if ($pureResponse === true) {
             return $response;
         }
 
         $content = "";
         try {
             $content = $response->getBody()->getContents();
+            if ($logActive) {
+                $array = [
+                    $content,
+                ];
+                LogConsoleFacade::full()->log('response-request', $array);
+            }
             $jsonReturn = json_decode($content, true);
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             SimpleNotificationFacade::email()
                 ->slack()
                 ->email()
@@ -118,26 +128,5 @@ class ExternalServiceRequestService
 
         return $jsonReturn;
 
-    }
-
-    private static function getInfo($file_paths)
-    {
-        $stringToReturn = "";
-        foreach ($file_paths as $file_path) {
-            foreach ($file_path as $key => $var) {
-                if ($key == 'args') {
-                    foreach ($var as $key_arg => $var_arg) {
-                        if (is_object($var_arg) === false && is_string($key_arg) && is_string($var_arg)) {
-                            $stringToReturn .= $key_arg . ': ' . $var_arg . '<br>';
-                        }
-                    }
-                } else {
-                    if (is_object($var) === false && is_string($key) && is_string($var)) {
-                        $stringToReturn .= $key . ': ' . $var . '<br>';
-                    }
-                }
-            }
-        }
-        return $stringToReturn;
     }
 }
