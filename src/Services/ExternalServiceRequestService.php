@@ -40,7 +40,7 @@ class ExternalServiceRequestService
         $async = false,
         $pureResponse = false,
         $proxy = false,
-        $logActive = false
+        $logActive = true
     ) {
         $client = new Client(
             [
@@ -78,6 +78,10 @@ class ExternalServiceRequestService
             $formAndHeader['proxy'] = config('external-request.proxy_ip');
         }
 
+        $array = ['method' => $method, 'url' => $baseUri . "" . $requestPath, 'params' => $formAndHeader];
+        if ($logActive == true) {
+            LogConsoleFacade::full()->log('external-response-request-before', $array);
+        }
         if ($async === true) {
             $formAndHeader['timeout']         = 0.4;
             $formAndHeader['connect_timeout'] = 0.4;
@@ -98,11 +102,11 @@ class ExternalServiceRequestService
         $content = "";
         try {
             $content = $response->getBody()->getContents();
-            if ($logActive) {
-                $array = [
+            if ($logActive == true) {
+                $array   = [
                     $content,
                 ];
-                LogConsoleFacade::full()->log('external-response-request', $array);
+                LogConsoleFacade::full()->log('external-response-request-after', $array);
             }
             $jsonReturn = json_decode($content, true);
         } catch (Exception $exception) {
