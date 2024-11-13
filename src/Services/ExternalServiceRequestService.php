@@ -93,21 +93,19 @@ class ExternalServiceRequestService
             }
         }
 
+        $content = "";
         $response = $client->request($method, $requestPath, $formAndHeader);
+        $content = $response->getBody()->getContents();
+        if ($logActive == true) {
+            $array['response']  = $content;
+            LogConsoleFacade::full()->log('external-response-request-after', $array);
+        }
 
         if ($pureResponse === true) {
             return $response;
         }
 
-        $content = "";
         try {
-            $content = $response->getBody()->getContents();
-            if ($logActive == true) {
-                $array   = [
-                    $content,
-                ];
-                LogConsoleFacade::full()->log('external-response-request-after', $array);
-            }
             $jsonReturn = json_decode($content, true);
         } catch (Exception $exception) {
             SimpleNotificationFacade::email()
