@@ -47,7 +47,7 @@ class ExternalServiceRequestService
         $pureResponse = false,
         $proxy = false,
         $logActive = true,
-        $hugeJson = true
+        $hugeJson = false
     ) {
         $client = new Client(
             [
