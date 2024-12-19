@@ -5,9 +5,12 @@ namespace Litermi\ExternalRequest\Services;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\StreamWrapper;
 use HttpException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use JsonMachine\Exception\InvalidArgumentException;
+use JsonMachine\Items;
 use Litermi\Logs\Facades\LogConsoleFacade;
 use Litermi\SimpleNotification\Facades\SimpleNotificationFacade;
 
@@ -26,9 +29,12 @@ class ExternalServiceRequestService
      * @param bool $async
      * @param bool $pureResponse
      * @param bool $proxy
+     * @param bool $logActive
+     * @param bool $hugeJson
      * @return mixed
      * @throws GuzzleException
      * @throws HttpException
+     * @throws InvalidArgumentException
      */
     public static function execute(
         $baseUri,
@@ -40,7 +46,8 @@ class ExternalServiceRequestService
         $async = false,
         $pureResponse = false,
         $proxy = false,
-        $logActive = true
+        $logActive = true,
+        $hugeJson = true
     ) {
         $client = new Client(
             [
@@ -95,14 +102,25 @@ class ExternalServiceRequestService
 
         $content = "";
         $response = $client->request($method, $requestPath, $formAndHeader);
+        if ($pureResponse === true) {
+            return $response;
+        }
+        if($hugeJson == true){
+            $phpStream = StreamWrapper::getResource($response->getBody());
+            $array = Items::fromStream($phpStream);
+            $newResponse = [];
+            foreach ($array as $key => $value) {
+                $newResponse[$key]=$value;
+            }
+
+            return $newResponse;
+        }
+
+
         $content = $response->getBody()->getContents();
         if ($logActive == true) {
             $array['response']  = $content;
             LogConsoleFacade::full()->log('external-response-request-after', $array);
-        }
-
-        if ($pureResponse === true) {
-            return $response;
         }
 
         try {
